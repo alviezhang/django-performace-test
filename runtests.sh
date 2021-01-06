@@ -6,7 +6,7 @@ function runtest() {
   # declares
   TEST_NAME=$1
   SERVER_COMMAND="poetry run gunicorn $2 -b 0.0.0.0:8000 -p /tmp/django_test.pid -D"
-  WRK_COMMAND="wrk -t 2 -c 200 http://127.0.0.1:8000/polls/ 2>&1"
+  WRK_COMMAND="wrk -t 2 -c 200 http://127.0.0.1:8000$3 2>&1"
 
   # Kill server first
   if [ -f /tmp/django_test.pid ]; then
@@ -39,6 +39,6 @@ function runtest() {
   sleep 3
 }
 
-runtest 'sync' 'wsgi:application -k sync'
-runtest 'gthread' 'wsgi:application -k gthread --threads 10'
-runtest 'ASGI' 'asgi:application -k uvicorn.workers.UvicornWorker'
+runtest 'sync' 'wsgi:application -k sync' '/sync'
+runtest 'gthread' 'wsgi:application -k gthread --threads 10' '/sync'
+runtest 'ASGI' 'asgi:application -k uvicorn.workers.UvicornWorker' '/async'
