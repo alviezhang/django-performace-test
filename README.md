@@ -1,4 +1,4 @@
-# Django performance test
+# A Django performance test
 
 A simple performance test between django ASGI and WSGI mode.
 
